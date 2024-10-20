@@ -12,16 +12,18 @@ class FieldGenerator:
             is_mine=False, texture="[ ]", mines_around=0
         ) for _ in range(1, xsize + 1)] for __ in range(1, ysize + 1)]
 
-    @staticmethod
-    def add_mines(field: list[list[Cell]], mines: int) -> list[list[Cell]]:
+    def add_mines(self, field: list[list[Cell]], mines: int) -> list[list[Cell]]:
         xsize = len(field[0])
         ysize = len(field)
         for _ in range(mines):
             while True:
                 x, y = random.randint(0, xsize - 1), random.randint(0, ysize - 1)
-                if not field[y][x].is_mine:
-                    field[y][x].is_mine = True
-                    break
+                if field[y][x].is_mine:
+                    continue
+                field[y][x].is_mine = True
+                for cell in self.get_around(field=field, xpos=x, ypos=y):
+                    cell.mines_around += 1
+                break
 
         return field
 
@@ -32,15 +34,6 @@ class FieldGenerator:
         res.remove(field[ypos][xpos])
         return res
 
-    def set_mines_around(self, field: list[list[Cell]]) -> list[list[Cell]]:
-        for i in range(len(field)):
-            for j in range(len(field[i])):
-                field[i][j].mines_around = len(list(filter(
-                    lambda x: x.is_mine, self.get_around(field=field, xpos=j, ypos=i)
-                )))
-
-        return field
-
     def generate(self, xsize: int, ysize: int, mines: int) -> list[list[Cell]]:
         if xsize <= 0 or ysize <= 0:
             raise FieldSizeError("Размер поля не может быть нулевым или отрицательным!")
@@ -50,5 +43,4 @@ class FieldGenerator:
             raise MinesNumberError("Мин должно быть хотя бы на 1 меньше, чем доступных в поле клеток!")
         field = self.empty_field(xsize=xsize, ysize=ysize)
         field = self.add_mines(field=field, mines=mines)
-        field = self.set_mines_around(field=field)
         return field
