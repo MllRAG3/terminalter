@@ -32,19 +32,24 @@ class Main:
             match d:
                 case "?":
                     self.field[x, y].settexture("[?]")
+
                 case _ as c if c.upper() == "O":
                     if not self.field.unlock_cell(self.field[x, y]):
                         raise Exception("Клетка не была разблокирована!")
                     return self.field.open(self.field[x, y])
+
                 case _ as c if c.upper() == "F":
                     self.field[x, y].settexture("[F]")
+
                 case _:
                     raise Exception("Введено неправильное действие! (Список доступных: ['O', 'F', '?'])")
+
         except IndexError:
             self.render()
             print("Введены неправильные координаты!")
             time.sleep(3)
             return False
+
         except Exception as e:
             self.render()
             print(e)
@@ -54,6 +59,7 @@ class Main:
     def game_polling(self):
         while True:
             self.render()
+
             try:
                 x = int(input("Введите X координату: ")) - 1
                 self.render()
@@ -62,13 +68,16 @@ class Main:
             except ValueError:
                 print("координаты - это числа :)")
                 continue
+
             if x < 0 or y < 0:
                 print("координаты не могут быть нулевыми или отрицательными!")
                 continue
+
             if self.turn(x=x, y=y):
                 self.render()
                 print(Fore.LIGHTRED_EX + "Вы наткнулись на мину! Для повторной игры перезапустите программу.")
                 return
+
             if self.field.is_cleared:
                 self.render()
                 print(Fore.LIGHTWHITE_EX + "FINE, U WON. IT WAS A GREAT JOB, BYE!")
