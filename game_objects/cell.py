@@ -18,12 +18,17 @@ class TextureColorConverter:
         match texture:
             case "[#]":
                 return Fore.LIGHTRED_EX + texture
+
             case "[ ]":
                 return Fore.LIGHTGREEN_EX + texture
+
             case "[?]":
+
                 return Fore.LIGHTMAGENTA_EX + texture
+
             case "[F]":
                 return Fore.LIGHTYELLOW_EX + texture
+
             case _ as num_texture:
                 return self.num_to_cols[int(num_texture.strip())] + num_texture
 
@@ -38,6 +43,7 @@ class Cell:
     def open(self) -> bool:
         self.settexture("[#]" if self.is_mine else f" {self.mines_around} ")
         self.is_opened = True
+
         return self.is_mine
 
     def settexture(self, new: str) -> None:
