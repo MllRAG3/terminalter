@@ -1,4 +1,5 @@
 import itertools
+
 from colorama import Fore
 
 from game_objects.cell import Cell
@@ -38,10 +39,7 @@ class Field:
 
         cell.open()
 
-        row = tuple(filter(lambda x: cell in x, self.field))[0]
-        xpos = row.index(cell)
-        ypos = self.field.index(row)
-        for f in filter(lambda x: not x.is_opened, self.get_around(field=self.field, xpos=xpos, ypos=ypos)):
+        for f in filter(lambda x: not x.is_opened, self.get_around(field=self.field, xpos=cell.xpos, ypos=cell.ypos)):
             self.open(cell=f)
 
     @property
@@ -57,10 +55,7 @@ class Field:
         ))
 
         if not zero_mines_around_cell:
-            to_open = list(filter(
-                lambda x: not x.is_mine,
-                itertools.chain(*self.field)
-            ))[0]
+            to_open = list(filter(lambda x: not x.is_mine, itertools.chain(*self.field)))[0]
         else:
             to_open = zero_mines_around_cell[0]
 

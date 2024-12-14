@@ -2,7 +2,7 @@ from colorama import Fore
 
 
 class TextureColorConverter:
-    num_to_cols = {
+    textures = {
         0: Fore.WHITE,
         1: Fore.BLUE,
         2: Fore.GREEN,
@@ -23,18 +23,19 @@ class TextureColorConverter:
                 return Fore.LIGHTGREEN_EX + texture
 
             case "[?]":
-
                 return Fore.LIGHTMAGENTA_EX + texture
 
             case "[F]":
                 return Fore.LIGHTYELLOW_EX + texture
 
             case _ as num_texture:
-                return self.num_to_cols[int(num_texture.strip())] + num_texture
+                return self.textures[int(num_texture.strip())] + num_texture
 
 
 class Cell:
-    def __init__(self, is_mine: bool, texture: str, mines_around: int, is_opened: bool = False) -> None:
+    def __init__(self, is_mine: bool, texture: str, mines_around: int, xpos: int, ypos: int, is_opened: bool = False) -> None:
+        self.ypos = ypos
+        self.xpos = xpos
         self.is_opened = is_opened
         self.mines_around = mines_around
         self.texture = texture
@@ -49,6 +50,7 @@ class Cell:
     def settexture(self, new: str) -> None:
         if self.is_opened:
             return
+
         self.texture = new
 
     @property
