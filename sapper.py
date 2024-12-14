@@ -1,7 +1,8 @@
-from argparse import ArgumentParser, Namespace
-from colorama import init, Fore
 import os
 import time
+from argparse import ArgumentParser, Namespace
+
+from colorama import init, Fore
 
 from game_objects import FieldGenerator, Field
 
@@ -23,10 +24,12 @@ class Main:
 
     def turn(self, x: int, y: int) -> bool:
         try:
-            instruction = ("Введите 'O' чтобы открыть клетку;"
-            "\nВведите '?' чтобы пометить клетку вопросительным знаком;"
-            "\nВведите 'F' чтобы пометить клетку флагом"
-            "\nВаше действие? [O/F/?]: >> ")
+            instruction = (
+                "Введите 'O' чтобы открыть клетку;"
+                "\nВведите '?' чтобы пометить клетку вопросительным знаком;"
+                "\nВведите 'F' чтобы пометить клетку флагом"
+                "\nВаше действие? [O/F/?]: >> "
+            )
             d = input(instruction)
 
             match d:

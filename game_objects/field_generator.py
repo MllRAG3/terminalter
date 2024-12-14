@@ -1,16 +1,16 @@
-import random
 import itertools
+import random
 
-from game_objects.cell import Cell
 from errors import MinesNumberError, FieldSizeError
+from game_objects.cell import Cell
 
 
 class FieldGenerator:
     @staticmethod
     def empty_field(xsize: int, ysize: int):
         return [[Cell(
-            is_mine=False, texture="[ ]", mines_around=0
-        ) for _ in range(1, xsize + 1)] for __ in range(1, ysize + 1)]
+            is_mine=False, texture="[ ]", mines_around=0, xpos=x, ypos=y
+        ) for x in range(xsize)] for y in range(ysize)]
 
     def add_mines(self, field: list[list[Cell]], mines: int) -> list[list[Cell]]:
         xsize = len(field[0])
@@ -22,10 +22,12 @@ class FieldGenerator:
 
                 if field[y][x].is_mine:
                     continue
+
                 field[y][x].is_mine = True
 
                 for cell in self.get_around(field=field, xpos=x, ypos=y):
                     cell.mines_around += 1
+
                 break
 
         return field
